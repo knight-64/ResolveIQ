@@ -1,0 +1,6 @@
+{
+  "name": "ResolveIQ",
+  "description": "Autonomous AI Customer Issue Resolution Platform — From Customer Issue to Verified Resolution with multi-agent reasoning, context retention, automated verification, and human handoff.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
