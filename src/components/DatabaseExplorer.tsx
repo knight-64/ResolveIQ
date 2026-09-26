@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { supabaseDb, SUPABASE_SQL_SCHEMA } from '../supabase';
-import { Database, Table, Search, RefreshCw, Copy, Check, ExternalLink, Terminal } from 'lucide-react';
+import { Database, Table, Search, RefreshCw, Copy, Check, ExternalLink, Terminal, Code2, ArrowUpRight, X } from 'lucide-react';
 
 export function DatabaseExplorer() {
   const [activeTable, setActiveTable] = useState<
@@ -40,56 +40,81 @@ export function DatabaseExplorer() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      {/* Top Header & Console Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-neutral-200 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-base font-bold text-slate-900">PostgreSQL / Supabase Relational Explorer</h2>
+            <h1 className="text-base font-semibold text-neutral-900">PostgreSQL Relational Ledger</h1>
+            <span className="text-[11px] font-mono font-medium text-neutral-600 bg-neutral-100 border border-neutral-200 px-2 py-0.5 rounded">
+              schema: public
+            </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Status: <span className="font-semibold text-slate-700">{config.statusMessage}</span>
-          </p>
+          <div className="flex items-center gap-2 text-xs text-neutral-500 mt-1">
+            <span className="flex items-center gap-1.5">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  config.isConnected ? 'bg-emerald-600' : 'bg-neutral-400'
+                }`}
+              />
+              <span>{config.statusMessage}</span>
+            </span>
+            <span>·</span>
+            <span>ACID Isolation: Read Committed</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
+            type="button"
             onClick={() => supabaseDb.resetDatabase()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-700 bg-white hover:bg-neutral-50 border border-neutral-200 rounded-md transition-colors shadow-2xs"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> Reset Database
+            <RefreshCw className="w-3.5 h-3.5 text-neutral-500" />
+            <span>Reset Demo Records</span>
           </button>
           <a
             href="https://supabase.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-900 bg-neutral-100 hover:bg-neutral-200/80 rounded-md transition-colors"
           >
-            Supabase.com <ExternalLink className="w-3.5 h-3.5" />
+            <span>Supabase Console</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500" />
           </a>
         </div>
       </div>
 
-      {/* Table Selector Tabs */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between px-6 pt-4 pb-2 border-b border-slate-100 gap-3">
-          <div className="flex flex-wrap gap-2">
+      {/* Main Table Explorer Surface */}
+      <div className="bg-white rounded-lg border border-neutral-200 shadow-2xs overflow-hidden">
+        {/* Navigation & Search Toolbar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between px-4 py-2.5 border-b border-neutral-200/80 gap-3 bg-neutral-50/50">
+          <div className="flex items-center gap-1 overflow-x-auto pb-1 lg:pb-0">
             {tables.map((tbl) => (
               <button
                 key={tbl.id}
-                onClick={() => setActiveTable(tbl.id as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                type="button"
+                onClick={() => {
+                  setActiveTable(tbl.id as any);
+                  setSearchQuery('');
+                }}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors whitespace-nowrap ${
                   activeTable === tbl.id
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-neutral-900 text-white font-semibold'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                 }`}
               >
-                {tbl.id === 'schema' ? <Terminal className="w-3.5 h-3.5" /> : <Table className="w-3.5 h-3.5" />}
+                {tbl.id === 'schema' ? (
+                  <Code2 className="w-3.5 h-3.5" />
+                ) : (
+                  <Table className="w-3.5 h-3.5 text-neutral-400" />
+                )}
                 <span className="font-mono">{tbl.label}</span>
                 {tbl.count !== null && (
                   <span
-                    className={`text-[10px] px-1.5 rounded-full ${
-                      activeTable === tbl.id ? 'bg-slate-700 text-slate-200' : 'bg-slate-200 text-slate-700'
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
+                      activeTable === tbl.id
+                        ? 'bg-neutral-800 text-neutral-200'
+                        : 'bg-neutral-200/70 text-neutral-600'
                     }`}
                   >
                     {tbl.count}
@@ -101,273 +126,322 @@ export function DatabaseExplorer() {
 
           {activeTable !== 'schema' && (
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-2.5 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search rows in table..."
+                placeholder="Filter table rows..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 w-48 font-mono"
+                className="pl-8 pr-7 py-1.5 bg-white border border-neutral-300 rounded-md text-xs text-neutral-900 placeholder-neutral-400 focus:outline-hidden focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 w-full sm:w-60 font-mono shadow-2xs"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-2.5 text-neutral-400 hover:text-neutral-700"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           )}
         </div>
 
-        {/* Content Area */}
-        <div className="p-4 overflow-x-auto">
+        {/* Table Content Surface */}
+        <div className="overflow-x-auto">
           {activeTable === 'schema' ? (
-            <div className="space-y-4 p-2">
-              <div className="flex items-center justify-between">
+            <div className="p-5 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-200/80">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">PostgreSQL Schema (Supabase DDL)</h3>
-                  <p className="text-xs text-slate-500">
-                    Use this script to create the relational schema with foreign key constraints in Supabase SQL editor.
+                  <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider">
+                    PostgreSQL Relational Schema (DDL)
+                  </h3>
+                  <p className="text-[11px] text-neutral-500 mt-0.5">
+                    Execute this script directly in your Supabase SQL Editor to provision tables, constraints, and RLS policies.
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={handleCopySchema}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 text-white rounded-md text-xs font-medium hover:bg-neutral-800 transition-colors shadow-2xs"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copied ? 'Copied to Clipboard!' : 'Copy SQL Schema'}
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied' : 'Copy DDL'}</span>
                 </button>
               </div>
-              <pre className="p-4 bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl overflow-x-auto max-h-[500px]">
-                {SUPABASE_SQL_SCHEMA}
+
+              <pre className="p-4 bg-neutral-950 text-neutral-100 font-mono text-xs rounded-md overflow-x-auto border border-neutral-800 leading-relaxed">
+                <code>{SUPABASE_SQL_SCHEMA}</code>
               </pre>
             </div>
           ) : activeTable === 'tickets' ? (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
                 <tr>
-                  <th className="p-3">id (text)</th>
-                  <th className="p-3">customer_id</th>
-                  <th className="p-3">title</th>
-                  <th className="p-3">priority</th>
-                  <th className="p-3">status</th>
-                  <th className="p-3">assigned_agent</th>
-                  <th className="p-3">created_at (timestamptz)</th>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">customer_id</th>
+                  <th className="py-2.5 px-4 font-medium">title</th>
+                  <th className="py-2.5 px-4 font-medium">status</th>
+                  <th className="py-2.5 px-4 font-medium">priority</th>
+                  <th className="py-2.5 px-4 font-medium text-right">created_at</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-neutral-100">
                 {tickets
                   .filter(
                     (t) =>
                       !searchQuery ||
                       t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                      t.title.toLowerCase().includes(searchQuery.toLowerCase())
+                      t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      t.customer_id.toLowerCase().includes(searchQuery.toLowerCase())
                   )
                   .map((t) => (
-                    <tr key={t.id} className="hover:bg-slate-50/80 font-mono">
-                      <td className="p-3 font-bold text-slate-900">{t.id}</td>
-                      <td className="p-3 text-slate-600">{t.customer_id}</td>
-                      <td className="p-3 text-slate-800 font-sans max-w-xs truncate">{t.title}</td>
-                      <td className="p-3">
+                    <tr key={t.id} className="hover:bg-neutral-50/80 transition-colors">
+                      <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{t.id}</td>
+                      <td className="py-2.5 px-4 font-mono text-neutral-600">{t.customer_id}</td>
+                      <td className="py-2.5 px-4 text-neutral-900 font-medium max-w-sm truncate">{t.title}</td>
+                      <td className="py-2.5 px-4">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            t.priority === 'URGENT' ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-700'
-                          }`}
-                        >
-                          {t.priority}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded font-medium ${
                             t.status === 'RESOLVED'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                               : t.status === 'ESCALATED'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-indigo-100 text-indigo-800'
+                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                              : 'bg-neutral-100 text-neutral-700 border border-neutral-200'
                           }`}
                         >
                           {t.status}
                         </span>
                       </td>
-                      <td className="p-3 text-slate-600 font-sans">{t.assigned_agent}</td>
-                      <td className="p-3 text-slate-400">{new Date(t.created_at).toLocaleTimeString()}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          ) : activeTable === 'transactions' ? (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th className="p-3">id (text)</th>
-                  <th className="p-3">customer_id</th>
-                  <th className="p-3">order_id</th>
-                  <th className="p-3">amount (numeric)</th>
-                  <th className="p-3">payment_method</th>
-                  <th className="p-3">status</th>
-                  <th className="p-3">location & ip</th>
-                  <th className="p-3">gateway_ref</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
-                {transactions
-                  .filter(
-                    (tx) =>
-                      !searchQuery ||
-                      tx.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                      tx.customer_id.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                  .map((tx) => (
-                    <tr key={tx.id} className="hover:bg-slate-50/80">
-                      <td className="p-3 font-bold text-slate-900">{tx.id}</td>
-                      <td className="p-3 text-slate-600">{tx.customer_id}</td>
-                      <td className="p-3 text-slate-500">{tx.order_id || '—'}</td>
-                      <td className="p-3 font-bold text-slate-900">₹{tx.amount.toLocaleString()}</td>
-                      <td className="p-3 text-slate-700">{tx.payment_method}</td>
-                      <td className="p-3">
+                      <td className="py-2.5 px-4">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            tx.status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded font-medium ${
+                            t.priority === 'URGENT'
+                              ? 'bg-rose-50 text-rose-800 border border-rose-200'
+                              : 'bg-neutral-100 text-neutral-600'
                           }`}
                         >
-                          {tx.status}
+                          {t.priority}
                         </span>
                       </td>
-                      <td className="p-3 text-slate-600">{tx.location || tx.ip_address}</td>
-                      <td className="p-3 text-slate-400">{tx.gateway_ref}</td>
+                      <td className="py-2.5 px-4 text-right font-mono text-neutral-500 text-[11px] tabular-nums">
+                        {new Date(t.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
                     </tr>
                   ))}
               </tbody>
             </table>
           ) : activeTable === 'customers' ? (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
                 <tr>
-                  <th className="p-3">id (text)</th>
-                  <th className="p-3">name</th>
-                  <th className="p-3">email</th>
-                  <th className="p-3">phone</th>
-                  <th className="p-3">customer_status</th>
-                  <th className="p-3">risk_level</th>
-                  <th className="p-3">total_spent (numeric)</th>
-                  <th className="p-3">last_ip</th>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">user_id</th>
+                  <th className="py-2.5 px-4 font-medium">status</th>
+                  <th className="py-2.5 px-4 font-medium">risk_level</th>
+                  <th className="py-2.5 px-4 font-medium text-right">total_spent</th>
+                  <th className="py-2.5 px-4 font-medium">last_ip</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
-                {customers.map((c) => (
-                  <tr key={c.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-bold text-slate-900">{c.id}</td>
-                    <td className="p-3 text-slate-800 font-sans font-medium">{c.user?.name}</td>
-                    <td className="p-3 text-slate-600">{c.user?.email}</td>
-                    <td className="p-3 text-slate-600">{c.user?.phone}</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
-                        {c.customer_status}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          c.risk_level === 'MEDIUM' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
-                        }`}
-                      >
-                        {c.risk_level}
-                      </span>
-                    </td>
-                    <td className="p-3 font-bold text-slate-900">₹{c.total_spent.toLocaleString()}</td>
-                    <td className="p-3 text-slate-500">{c.last_ip}</td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-neutral-100">
+                {customers
+                  .filter(
+                    (c) =>
+                      !searchQuery ||
+                      c.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      c.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((c) => (
+                    <tr key={c.id} className="hover:bg-neutral-50/80 transition-colors">
+                      <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{c.id}</td>
+                      <td className="py-2.5 px-4 text-neutral-700">
+                        {c.user?.name} <span className="text-neutral-400 font-mono text-[11px]">({c.user_id})</span>
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-800 border border-neutral-200 font-medium">
+                          {c.customer_status}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <span
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded font-medium ${
+                            c.risk_level === 'MEDIUM' || c.risk_level === 'HIGH'
+                              ? 'bg-rose-50 text-rose-800 border border-rose-200'
+                              : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          }`}
+                        >
+                          {c.risk_level}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4 text-right font-mono font-medium text-neutral-900 tabular-nums">
+                        ₹{c.total_spent.toLocaleString()}
+                      </td>
+                      <td className="py-2.5 px-4 font-mono text-neutral-600 text-[11px]">{c.last_ip}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          ) : activeTable === 'transactions' ? (
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
+                <tr>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">order_id</th>
+                  <th className="py-2.5 px-4 font-medium text-right">amount</th>
+                  <th className="py-2.5 px-4 font-medium">method</th>
+                  <th className="py-2.5 px-4 font-medium">status</th>
+                  <th className="py-2.5 px-4 font-medium text-right">transaction_date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-100">
+                {transactions
+                  .filter(
+                    (t) =>
+                      !searchQuery ||
+                      t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      t.order_id?.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((t) => (
+                    <tr key={t.id} className="hover:bg-neutral-50/80 transition-colors">
+                      <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{t.id}</td>
+                      <td className="py-2.5 px-4 font-mono text-neutral-600">{t.order_id || '—'}</td>
+                      <td className="py-2.5 px-4 text-right font-mono font-medium text-neutral-900 tabular-nums">
+                        ₹{t.amount.toLocaleString()}
+                      </td>
+                      <td className="py-2.5 px-4 text-neutral-600 font-mono text-[11px]">{t.payment_method}</td>
+                      <td className="py-2.5 px-4">
+                        <span
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded font-medium ${
+                            t.status === 'SUCCESS'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              : 'bg-rose-50 text-rose-800 border border-rose-200'
+                          }`}
+                        >
+                          {t.status}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4 text-right font-mono text-neutral-500 text-[11px] tabular-nums">
+                        {new Date(t.transaction_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          ) : activeTable === 'orders' ? (
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
+                <tr>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">customer_id</th>
+                  <th className="py-2.5 px-4 font-medium text-right">amount</th>
+                  <th className="py-2.5 px-4 font-medium">status</th>
+                  <th className="py-2.5 px-4 font-medium">items_summary</th>
+                  <th className="py-2.5 px-4 font-medium text-right">created_at</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-100">
+                {orders
+                  .filter(
+                    (o) =>
+                      !searchQuery ||
+                      o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      o.customer_id.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((o) => (
+                    <tr key={o.id} className="hover:bg-neutral-50/80 transition-colors">
+                      <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{o.id}</td>
+                      <td className="py-2.5 px-4 font-mono text-neutral-600">{o.customer_id}</td>
+                      <td className="py-2.5 px-4 text-right font-mono font-medium text-neutral-900 tabular-nums">
+                        ₹{o.amount.toLocaleString()}
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-neutral-100 text-neutral-700 border border-neutral-200 font-medium">
+                          {o.status}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4 text-neutral-700 font-mono text-[11px] max-w-xs truncate">{o.items_summary || '—'}</td>
+                      <td className="py-2.5 px-4 text-right font-mono text-neutral-500 text-[11px] tabular-nums">
+                        {new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           ) : activeTable === 'refunds' ? (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
                 <tr>
-                  <th className="p-3">id</th>
-                  <th className="p-3">transaction_id</th>
-                  <th className="p-3">amount</th>
-                  <th className="p-3">status</th>
-                  <th className="p-3">reason</th>
-                  <th className="p-3">gateway_reference</th>
-                  <th className="p-3">created_at</th>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">transaction_id</th>
+                  <th className="py-2.5 px-4 font-medium text-right">amount</th>
+                  <th className="py-2.5 px-4 font-medium">reason</th>
+                  <th className="py-2.5 px-4 font-medium">gateway_reference</th>
+                  <th className="py-2.5 px-4 font-medium">status</th>
+                  <th className="py-2.5 px-4 font-medium text-right">created_at</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
-                {refunds.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-bold text-emerald-700">{r.id}</td>
-                    <td className="p-3 text-slate-600">{r.transaction_id}</td>
-                    <td className="p-3 font-bold text-slate-900">₹{r.amount.toLocaleString()}</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                        {r.status}
-                      </span>
+              <tbody className="divide-y divide-neutral-100">
+                {refunds.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-neutral-400">
+                      No refunds have been processed yet. Settle a claim from the Dispute Workbench to record ledger disbursements.
                     </td>
-                    <td className="p-3 text-slate-700 font-sans max-w-xs truncate">{r.reason}</td>
-                    <td className="p-3 text-slate-500">{r.gateway_reference}</td>
-                    <td className="p-3 text-slate-400">{new Date(r.created_at).toLocaleTimeString()}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : activeTable === 'audit_logs' ? (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th className="p-3">id</th>
-                  <th className="p-3">ticket_id</th>
-                  <th className="p-3">actor</th>
-                  <th className="p-3">action</th>
-                  <th className="p-3">metadata (jsonb)</th>
-                  <th className="p-3">created_at</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
-                {auditLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-bold text-slate-800">{log.id}</td>
-                    <td className="p-3 text-indigo-700">{log.ticket_id}</td>
-                    <td className="p-3 text-slate-700 font-sans">{log.actor}</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-800">
-                        {log.action}
-                      </span>
-                    </td>
-                    <td className="p-3 text-slate-500 max-w-sm truncate">{JSON.stringify(log.metadata)}</td>
-                    <td className="p-3 text-slate-400">{new Date(log.created_at).toLocaleTimeString()}</td>
-                  </tr>
-                ))}
+                ) : (
+                  refunds
+                    .filter(
+                      (r) =>
+                        !searchQuery ||
+                        r.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        r.reason.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                    .map((r) => (
+                      <tr key={r.id} className="hover:bg-neutral-50/80 transition-colors">
+                        <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{r.id}</td>
+                        <td className="py-2.5 px-4 font-mono text-neutral-600">{r.transaction_id}</td>
+                        <td className="py-2.5 px-4 text-right font-mono font-semibold text-emerald-700 tabular-nums">
+                          ₹{r.amount.toLocaleString()}
+                        </td>
+                        <td className="py-2.5 px-4 text-neutral-700 max-w-xs truncate">{r.reason}</td>
+                        <td className="py-2.5 px-4 font-mono text-neutral-500 text-[11px]">{r.gateway_reference}</td>
+                        <td className="py-2.5 px-4">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            {r.status}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4 text-right font-mono text-neutral-500 text-[11px] tabular-nums">
+                          {new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </td>
+                      </tr>
+                    ))
+                )}
               </tbody>
             </table>
           ) : (
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-mono uppercase tracking-wider border-b border-slate-200">
+            <table className="w-full text-left text-xs divide-y divide-neutral-200/80">
+              <thead className="bg-neutral-50 text-neutral-500 font-mono text-[11px] uppercase tracking-wider">
                 <tr>
-                  <th className="p-3">id</th>
-                  <th className="p-3">customer_id</th>
-                  <th className="p-3">amount</th>
-                  <th className="p-3">status</th>
-                  <th className="p-3">items_summary</th>
-                  <th className="p-3">created_at</th>
+                  <th className="py-2.5 px-4 font-medium">id</th>
+                  <th className="py-2.5 px-4 font-medium">action</th>
+                  <th className="py-2.5 px-4 font-medium">ticket_id</th>
+                  <th className="py-2.5 px-4 font-medium">actor</th>
+                  <th className="py-2.5 px-4 font-medium">metadata</th>
+                  <th className="py-2.5 px-4 font-medium text-right">timestamp</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
-                {orders.map((o) => (
-                  <tr key={o.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-bold text-slate-900">{o.id}</td>
-                    <td className="p-3 text-slate-600">{o.customer_id}</td>
-                    <td className="p-3 font-bold text-slate-900">₹{o.amount.toLocaleString()}</td>
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          o.status === 'COMPLETED'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : o.status === 'FAILED'
-                            ? 'bg-rose-100 text-rose-800'
-                            : 'bg-indigo-100 text-indigo-800'
-                        }`}
-                      >
-                        {o.status}
-                      </span>
+              <tbody className="divide-y divide-neutral-100">
+                {auditLogs.map((log) => (
+                  <tr key={log.id} className="hover:bg-neutral-50/80 transition-colors">
+                    <td className="py-2.5 px-4 font-mono font-medium text-neutral-900">{log.id}</td>
+                    <td className="py-2.5 px-4 font-mono font-semibold text-neutral-900 text-[11px]">{log.action}</td>
+                    <td className="py-2.5 px-4 font-mono text-neutral-600 text-[11px]">{log.ticket_id}</td>
+                    <td className="py-2.5 px-4 text-neutral-700 text-[11px]">{log.actor}</td>
+                    <td className="py-2.5 px-4 font-mono text-neutral-500 text-[10px] max-w-xs truncate">
+                      {JSON.stringify(log.metadata)}
                     </td>
-                    <td className="p-3 text-slate-700 font-sans max-w-xs truncate">{o.items_summary}</td>
-                    <td className="p-3 text-slate-400">{new Date(o.created_at).toLocaleTimeString()}</td>
+                    <td className="py-2.5 px-4 text-right font-mono text-neutral-500 text-[11px] tabular-nums">
+                      {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
                   </tr>
                 ))}
               </tbody>

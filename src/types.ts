@@ -10,7 +10,7 @@
 export type CustomerStatus = 'ACTIVE' | 'VIP' | 'FLAGGED' | 'SUSPENDED';
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
-export type TicketStatus = 'NEW' | 'INVESTIGATING' | 'ACTION_REQUIRED' | 'RESOLVED' | 'ESCALATED' | 'CLOSED';
+export type TicketStatus = 'NEW' | 'OPEN' | 'IN_PROGRESS' | 'INVESTIGATING' | 'ACTION_REQUIRED' | 'RESOLVED' | 'ESCALATED' | 'CLOSED';
 export type TransactionStatus = 'SUCCESS' | 'FAILED' | 'PENDING' | 'REFUNDED' | 'DISPUTED';
 export type OrderStatus = 'COMPLETED' | 'FAILED' | 'PENDING' | 'CANCELLED' | 'PROCESSING' | 'SHIPPED';
 export type RefundStatus = 'NOT_INITIATED' | 'INITIATED' | 'PROCESSING' | 'COMPLETED' | 'REJECTED' | 'FAILED';

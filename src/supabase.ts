@@ -216,19 +216,89 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
 
 export const INITIAL_TICKETS: Ticket[] = [
   {
-    id: 'RX-1019',
+    id: 'TCK-06758',
+    customer_id: 'CUST-1001',
+    title: 'UPI payment gateway timeout on Order ORD-8812',
+    description: 'Amount ₹2,000 was debited via UPI (ananya@okhdfcbank) but checkout marked status as failed.',
+    intent: 'PAYMENT_GATEWAY_TIMEOUT',
+    priority: 'HIGH',
+    status: 'OPEN',
+    assigned_agent: 'ResolveIQ Engine',
+    confidence_score: 97,
+    created_at: '2026-09-25T19:30:00Z',
+    updated_at: '2026-09-25T19:30:00Z',
+    estimated_resolution_time: 'Instant (< 2s)',
+  },
+  {
+    id: 'TCK-08508',
+    customer_id: 'CUST-1002',
+    title: 'Security flag: Tor exit node IP access detected',
+    description: 'High-value transaction of ₹8,500 initiated from recognized Tor relay (185.220.101.5). Requires officer verification.',
+    intent: 'FRAUD_SUSPICION',
+    priority: 'URGENT',
+    status: 'ESCALATED',
+    assigned_agent: 'Fraud Review Desk',
+    confidence_score: 91,
+    created_at: '2026-09-25T14:15:00Z',
+    updated_at: '2026-09-25T14:20:00Z',
+    estimated_resolution_time: 'Manual SLA (< 2h)',
+  },
+  {
+    id: 'TCK-05509',
+    customer_id: 'CUST-1003',
+    title: 'Double debit verification for Order ORD-4091',
+    description: 'Customer statement shows two simultaneous debits of ₹1,499 on ICICI netbanking switch.',
+    intent: 'DOUBLE_DEBIT',
+    priority: 'MEDIUM',
+    status: 'IN_PROGRESS',
+    assigned_agent: 'Billing Operations',
+    confidence_score: 94,
+    created_at: '2026-09-24T18:45:00Z',
+    updated_at: '2026-09-25T09:10:00Z',
+    estimated_resolution_time: '15 mins',
+  },
+  {
+    id: 'TCK-08588',
     customer_id: 'CUST-1004',
-    title: 'Billing clarification for delivery charges',
+    title: 'Estimated delivery timeline inquiry for Order ORD-3820',
+    description: 'Customer requesting courier tracking AWB number for Mechanical Keyboard shipment.',
+    intent: 'ORDER_TRACKING',
+    priority: 'LOW',
+    status: 'OPEN',
+    assigned_agent: 'Logistics Desk',
+    confidence_score: 99,
+    created_at: '2026-09-24T11:20:00Z',
+    updated_at: '2026-09-24T11:20:00Z',
+    estimated_resolution_time: 'Instant (< 1s)',
+  },
+  {
+    id: 'TCK-09588',
+    customer_id: 'CUST-1001',
+    title: 'Unrecognized card transaction dispute for ₹3,499',
+    description: 'Cardholder noticed unexpected charge while traveling. Card temporarily blocked by issuer.',
+    intent: 'UNAUTHORIZED_CHARGE',
+    priority: 'HIGH',
+    status: 'OPEN',
+    assigned_agent: 'Risk Triage Agent',
+    confidence_score: 93,
+    created_at: '2026-09-23T16:05:00Z',
+    updated_at: '2026-09-23T16:05:00Z',
+    estimated_resolution_time: '30 mins',
+  },
+  {
+    id: 'TCK-23358',
+    customer_id: 'CUST-1004',
+    title: 'Billing clarification for delivery express surcharge',
     description: 'Customer inquired why express delivery fee was charged on standard checkout.',
     intent: 'BILLING_QUERY',
     priority: 'LOW',
     status: 'RESOLVED',
-    assigned_agent: 'General Agent',
+    assigned_agent: 'ResolveIQ Engine',
     confidence_score: 98,
-    created_at: '2026-09-18T14:20:00Z',
-    updated_at: '2026-09-18T14:25:00Z',
-    resolved_at: '2026-09-18T14:25:00Z',
-    estimated_resolution_time: 'Instant (< 3s)',
+    created_at: '2026-09-22T10:10:00Z',
+    updated_at: '2026-09-22T10:10:02Z',
+    resolved_at: '2026-09-22T10:10:02Z',
+    estimated_resolution_time: 'Instant (1.8s)',
   },
 ];
 
@@ -241,19 +311,43 @@ export const INITIAL_REFUNDS: Refund[] = [
     status: 'COMPLETED',
     reason: 'Partial goodwill promotional credit discount',
     gateway_reference: 'PG_REF_11094',
-    created_at: '2026-09-11T10:00:00Z',
-    updated_at: '2026-09-11T10:05:00Z',
+    created_at: '2026-09-22T10:10:02Z',
+    updated_at: '2026-09-22T10:10:05Z',
   },
 ];
 
 export const INITIAL_AUDIT_LOGS: AuditLog[] = [
   {
-    id: 'AUD-101',
-    ticket_id: 'RX-1019',
+    id: 'AUD-8910',
+    ticket_id: 'TCK-06758',
     actor: 'ResolveIQ Engine',
-    action: 'POSTGRES_SCHEMA_READY',
-    metadata: { engine: 'Supabase PostgreSQL', schema_tables: 6 },
-    created_at: '2026-09-18T14:00:00Z',
+    action: 'TICKET_INGESTED',
+    metadata: { source: 'Checkout UPI Webhook', amount: 2000, bank: 'HDFC Bank' },
+    created_at: '2026-09-25T19:30:00Z',
+  },
+  {
+    id: 'AUD-8909',
+    ticket_id: 'TCK-08508',
+    actor: 'Security Guard',
+    action: 'ANOMALY_HALTED',
+    metadata: { reason: 'Tor Exit Node detected (185.220.101.5)', risk_score: 94 },
+    created_at: '2026-09-25T14:15:10Z',
+  },
+  {
+    id: 'AUD-8908',
+    ticket_id: 'TCK-05509',
+    actor: 'Banking Ledger Syncer',
+    action: 'RECONCILIATION_FLAGGED',
+    metadata: { duplicate_seq: 'PG_UPI_9901201', order_id: 'ORD-4091' },
+    created_at: '2026-09-24T18:45:00Z',
+  },
+  {
+    id: 'AUD-8907',
+    ticket_id: 'TCK-23358',
+    actor: 'ResolveIQ Engine',
+    action: 'AUTONOMOUS_SETTLEMENT',
+    metadata: { refund_id: 'REF-5501', execution_latency_ms: 1820 },
+    created_at: '2026-09-22T10:10:02Z',
   },
 ];
 
@@ -394,6 +488,9 @@ class SupabaseDatabaseService {
         if (cached) {
           const parsed = JSON.parse(cached);
           if (parsed && parsed.customers) {
+            const existingTicketIds = new Set((parsed.tickets || []).map((t: any) => t.id));
+            const missingTickets = INITIAL_TICKETS.filter((t) => !existingTicketIds.has(t.id));
+            parsed.tickets = [...(parsed.tickets || []), ...missingTickets];
             this.localData = parsed;
           }
         }

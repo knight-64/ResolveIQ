@@ -1,1 +1,139 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-feature-settings: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --bg-main: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+  }
+
+  html.dark, html[data-theme='midnight'] {
+    --bg-main: #07090e;
+    --card-bg: #0d111a;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #1e293b;
+    color-scheme: dark;
+  }
+
+  code, kbd, samp, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: 'zero' 1;
+  }
+
+  /* Custom subtle scrollbars for dense data tables */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+  }
+
+  html.dark ::-webkit-scrollbar-thumb {
+    background: #27272a;
+  }
+  html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+  }
+}
+
+/* ==========================================================================
+   Midnight Dark Theme — High-Contrast Enterprise Styling System
+   ========================================================================== */
+
+html.dark body {
+  background-color: #07090e !important;
+  color: #f8fafc !important;
+}
+
+/* Card & Surface Containers */
+html.dark .bg-white {
+  background-color: #0d111a !important;
+}
+
+html.dark .bg-neutral-50,
+html.dark .bg-neutral-50\/70,
+html.dark .bg-neutral-50\/60,
+html.dark .bg-neutral-50\/50,
+html.dark .bg-neutral-100 {
+  background-color: #080b12 !important;
+}
+
+/* High-Contrast Borders */
+html.dark .border-neutral-200,
+html.dark .border-neutral-200\/90,
+html.dark .border-neutral-200\/80,
+html.dark .border-neutral-300 {
+  border-color: #1a2233 !important;
+}
+
+html.dark .border-neutral-100 {
+  border-color: #151b29 !important;
+}
+
+html.dark .divide-neutral-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #1a2233 !important;
+}
+
+/* High-Contrast Typography */
+html.dark .text-neutral-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-neutral-800 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-neutral-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-neutral-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-neutral-500 {
+  color: #64748b !important;
+}
+
+/* Table & Interactive Row Hover States */
+html.dark .hover\:bg-neutral-50:hover,
+html.dark .hover\:bg-neutral-50\/80:hover,
+html.dark .hover\:bg-neutral-100:hover {
+  background-color: #131a29 !important;
+}
+
+/* Inputs, Textareas, Selects */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #090d16 !important;
+  border-color: #1f293d !important;
+  color: #f8fafc !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Modals & Popovers */
+html.dark .shadow-2xl,
+html.dark .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7) !important;
+}

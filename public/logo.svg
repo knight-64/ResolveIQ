@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none">
+  <defs>
+    <linearGradient id="fullQGrad" x1="100" y1="50" x2="400" y2="350" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="60%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#B91C1C" />
+    </linearGradient>
+    <linearGradient id="fullHeadband" x1="180" y1="110" x2="320" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DC2626" />
+      <stop offset="50%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#DC2626" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sparkles top right -->
+  <path d="M 355 60 Q 355 82 377 82 Q 355 82 355 104 Q 355 82 333 82 Q 355 82 355 60 Z" fill="#DC2626" />
+  <path d="M 386 92 Q 386 107 401 107 Q 386 107 386 122 Q 386 107 371 107 Q 386 107 386 92 Z" fill="#EF4444" />
+
+  <!-- Main Q Ring with Diagonal Foot -->
+  <path d="M 250 70 
+           A 140 140 0 1 1 346 332
+           L 378 364
+           L 342 364
+           L 320 342
+           A 140 140 0 0 1 250 70 Z" 
+        fill="url(#fullQGrad)" />
+
+  <!-- Inner Speech Bubble -->
+  <path d="M 245 110 
+           C 175 110 130 150 130 205 
+           C 130 236 148 263 175 280
+           L 156 316 
+           L 202 296 
+           C 215 300 230 302 245 302 
+           C 315 302 360 262 360 205 
+           C 360 150 315 110 245 110 Z" 
+        fill="#FFFFFF" />
+
+  <!-- Headset Arc -->
+  <path d="M 180 180 C 180 140 205 118 245 118 C 285 118 310 140 310 180" 
+        stroke="url(#fullHeadband)" 
+        stroke-width="11" 
+        stroke-linecap="round" 
+        fill="none" />
+
+  <!-- Ear Cups -->
+  <rect x="156" y="166" width="30" height="58" rx="15" fill="#DC2626" />
+  <rect x="304" y="166" width="30" height="58" rx="15" fill="#DC2626" />
+
+  <!-- Robot Face Capsule -->
+  <rect x="190" y="156" width="110" height="76" rx="30" fill="#0F172A" />
+
+  <!-- Happy Eyes -->
+  <path d="M 208 194 Q 219 178 230 194" 
+        stroke="#EF4444" 
+        stroke-width="6.5" 
+        stroke-linecap="round" 
+        fill="none" />
+  <path d="M 260 194 Q 271 178 282 194" 
+        stroke="#EF4444" 
+        stroke-width="6.5" 
+        stroke-linecap="round" 
+        fill="none" />
+
+  <!-- Mic Boom & Capsule -->
+  <path d="M 314 205 Q 306 250 266 254" 
+        stroke="#DC2626" 
+        stroke-width="7.5" 
+        stroke-linecap="round" 
+        fill="none" />
+  <rect x="250" y="246" width="26" height="15" rx="7.5" fill="#DC2626" />
+
+  <!-- Wordmark "ResolveIQ" -->
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="64" letter-spacing="-1.5">
+    <text x="38" y="440" fill="#0F172A">Resolve</text>
+    <text x="368" y="440" fill="#DC2626">IQ</text>
+  </g>
+
+  <!-- Tagline "Smarter Support. Faster Resolutions." -->
+  <text x="60" y="480" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-weight="600" 
+        font-size="20" 
+        fill="#334155" 
+        letter-spacing="0.2">
+    Smarter Support. Faster Resolutions.
+  </text>
+</svg>

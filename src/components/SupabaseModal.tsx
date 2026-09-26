@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabaseDb, SUPABASE_SQL_SCHEMA } from '../supabase';
-import { Database, CheckCircle2, AlertCircle, Copy, Check, Key, Globe, ExternalLink, X } from 'lucide-react';
+import { Database, CheckCircle2, AlertCircle, Copy, Check, Key, Globe, ExternalLink, X, Loader2, ArrowUpRight } from 'lucide-react';
 
 interface SupabaseModalProps {
   isOpen: boolean;
@@ -63,130 +63,139 @@ export function SupabaseModal({ isOpen, onClose, onConfigured }: SupabaseModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
-              <Database className="w-5 h-5" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+      <div className="bg-white rounded-lg shadow-xl border border-neutral-200 max-w-xl w-full overflow-hidden flex flex-col max-h-[88vh]">
+        {/* Modal Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 bg-neutral-50/70">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-md bg-neutral-900 text-white flex items-center justify-center">
+              <Database className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Supabase (PostgreSQL) Integration</h2>
-              <p className="text-xs text-slate-500">Connect to your Supabase PostgreSQL database</p>
+              <h2 className="text-sm font-semibold text-neutral-900">PostgreSQL Connection Settings</h2>
+              <p className="text-xs text-neutral-500">Configure Supabase credentials or use the local demo store</p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-neutral-400 hover:text-neutral-700 p-1 rounded-md hover:bg-neutral-100 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab switch */}
-        <div className="flex border-b border-slate-100 px-6 gap-6 text-sm font-semibold text-slate-600 bg-white">
+        <div className="flex border-b border-neutral-200 px-5 gap-6 text-xs font-medium text-neutral-600 bg-white">
           <button
+            type="button"
             onClick={() => setActiveTab('connect')}
             className={`py-3 border-b-2 transition-colors ${
               activeTab === 'connect'
-                ? 'border-emerald-600 text-emerald-700'
-                : 'border-transparent hover:text-slate-900'
+                ? 'border-neutral-900 text-neutral-950 font-semibold'
+                : 'border-transparent hover:text-neutral-900'
             }`}
           >
-            Connection Settings
+            Credentials & Status
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab('schema')}
             className={`py-3 border-b-2 transition-colors ${
               activeTab === 'schema'
-                ? 'border-emerald-600 text-emerald-700'
-                : 'border-transparent hover:text-slate-900'
+                ? 'border-neutral-900 text-neutral-950 font-semibold'
+                : 'border-transparent hover:text-neutral-900'
             }`}
           >
-            SQL Schema (PostgreSQL)
+            PostgreSQL SQL Schema (DDL)
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-5">
+        {/* Modal Body */}
+        <div className="p-5 overflow-y-auto flex-1 space-y-4">
           {activeTab === 'connect' ? (
             <form onSubmit={handleTestAndSave} className="space-y-4">
-              <div className="p-4 bg-emerald-50/60 border border-emerald-200/80 rounded-xl text-xs text-emerald-900 leading-relaxed">
-                <p className="font-semibold mb-1">⚡ Quick Setup with Supabase:</p>
-                <ol className="list-decimal list-inside space-y-1 text-emerald-800">
-                  <li>Create a free project at <span className="font-mono font-medium">supabase.com</span></li>
-                  <li>In your Supabase Dashboard, go to <strong>Project Settings → API</strong></li>
-                  <li>Copy your <strong>Project URL</strong> and <strong>anon public key</strong> and paste below</li>
-                  <li>Execute the provided <strong>SQL Schema</strong> in the Supabase SQL Editor</li>
+              <div className="p-3.5 bg-neutral-50 border border-neutral-200 rounded-md text-xs text-neutral-700 leading-relaxed space-y-1.5">
+                <div className="font-semibold text-neutral-900">Connecting to your own Supabase instance:</div>
+                <ol className="list-decimal list-inside space-y-0.5 text-neutral-600 text-[11px]">
+                  <li>Open your Supabase dashboard at <strong>supabase.com</strong></li>
+                  <li>Navigate to <strong>Project Settings → API</strong></li>
+                  <li>Copy your <strong>Project URL</strong> and <strong>anon public key</strong> into the fields below</li>
+                  <li>Execute the provided <strong>SQL Schema</strong> in the SQL Editor</li>
                 </ol>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-slate-400" /> Supabase Project URL
+              <div className="space-y-1">
+                <label className="block text-xs font-medium text-neutral-700">
+                  Supabase Project URL:
                 </label>
                 <input
                   type="url"
-                  placeholder="https://xyzcompany.supabase.co"
+                  placeholder="https://your-project.supabase.co"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:bg-white font-mono"
+                  className="w-full px-3 py-2 bg-white border border-neutral-300 rounded-md text-xs text-neutral-900 placeholder-neutral-400 focus:outline-hidden focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 font-mono"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-slate-400" /> Supabase Anon Public Key
+              <div className="space-y-1">
+                <label className="block text-xs font-medium text-neutral-700">
+                  Supabase Anon Public API Key:
                 </label>
                 <input
                   type="password"
                   placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                   value={anonKey}
                   onChange={(e) => setAnonKey(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:bg-white font-mono"
+                  className="w-full px-3 py-2 bg-white border border-neutral-300 rounded-md text-xs text-neutral-900 placeholder-neutral-400 focus:outline-hidden focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 font-mono"
                 />
               </div>
 
               {testResult && (
                 <div
-                  className={`p-3.5 rounded-xl border text-xs flex items-start gap-2.5 ${
+                  className={`p-3 rounded-md text-xs flex items-start gap-2 border ${
                     testResult.success
-                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                      : 'bg-amber-50 border-amber-200 text-amber-800'
+                      ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                      : 'bg-rose-50 text-rose-900 border-rose-200'
                   }`}
                 >
                   {testResult.success ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   ) : (
-                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   )}
-                  <span>{testResult.message}</span>
+                  <div>
+                    <span className="font-semibold block">{testResult.success ? 'Success' : 'Notice'}</span>
+                    <span className="text-[11px] leading-relaxed">{testResult.message}</span>
+                  </div>
                 </div>
               )}
 
-              <div className="pt-2 flex items-center justify-between gap-3">
+              <div className="pt-2 border-t border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={handleUseDemo}
-                  className="text-xs text-slate-500 hover:text-slate-800 underline underline-offset-2"
+                  className="text-xs text-neutral-600 hover:text-neutral-900 font-medium underline text-left"
                 >
-                  Use Built-in PostgreSQL Demo Mode
+                  Reset to Local In-Memory Demo
                 </button>
-                <div className="flex gap-2">
+
+                <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                    className="px-3.5 py-1.5 rounded-md border border-neutral-300 text-xs font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
                   >
-                    Close
+                    Cancel
                   </button>
+
                   <button
                     type="submit"
                     disabled={testing}
-                    className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-lg transition-colors shadow-xs"
+                    className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 disabled:opacity-50 text-white rounded-md text-xs font-medium transition-colors shadow-2xs"
                   >
-                    {testing ? 'Testing Connection...' : 'Save & Connect'}
+                    {testing && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    <span>Test & Save</span>
                   </button>
                 </div>
               </div>
@@ -194,31 +203,24 @@ export function SupabaseModal({ isOpen, onClose, onConfigured }: SupabaseModalPr
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-600">
-                  Run this SQL in your Supabase project's <strong>SQL Editor</strong> to create the relational tables:
-                </p>
+                <div>
+                  <h3 className="text-xs font-semibold text-neutral-900">PostgreSQL DDL Schema</h3>
+                  <p className="text-[11px] text-neutral-500">Run this in your Supabase SQL editor</p>
+                </div>
                 <button
+                  type="button"
                   onClick={handleCopySchema}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-medium hover:bg-slate-900 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 text-white rounded-md text-xs font-medium hover:bg-neutral-800 transition-colors shadow-2xs"
                 >
-                  {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copiedSchema ? 'Copied!' : 'Copy SQL Schema'}
+                  {copiedSchema ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedSchema ? 'Copied' : 'Copy DDL'}</span>
                 </button>
               </div>
 
-              <div className="bg-slate-900 text-slate-100 rounded-xl p-4 font-mono text-xs overflow-x-auto max-h-80 border border-slate-800">
-                <pre>{SUPABASE_SQL_SCHEMA}</pre>
-              </div>
-
-              <div className="flex justify-end">
-                <a
-                  href="https://supabase.com/dashboard"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700"
-                >
-                  Open Supabase Dashboard <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+              <div className="rounded-md border border-neutral-800 bg-neutral-950 p-4 max-h-[380px] overflow-y-auto">
+                <pre className="font-mono text-xs text-neutral-300 leading-relaxed">
+                  {SUPABASE_SQL_SCHEMA}
+                </pre>
               </div>
             </div>
           )}

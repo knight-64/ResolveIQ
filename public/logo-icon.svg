@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="qGrad" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="60%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#B91C1C" />
+    </linearGradient>
+    <linearGradient id="headbandGrad" x1="60" y1="40" x2="140" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DC2626" />
+      <stop offset="50%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#DC2626" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sparkles top right -->
+  <!-- Top star -->
+  <path d="M 142 22 Q 142 32 152 32 Q 142 32 142 42 Q 142 32 132 32 Q 142 32 142 22 Z" fill="#DC2626" />
+  <!-- Secondary smaller star -->
+  <path d="M 156 36 Q 156 43 163 43 Q 156 43 156 50 Q 156 43 149 43 Q 156 43 156 36 Z" fill="#EF4444" />
+
+  <!-- Main Q Badge Body -->
+  <!-- Circle with bottom-right Q diagonal tail -->
+  <path d="M 100 26 
+           A 64 64 0 1 1 144 146
+           L 158 160
+           L 142 160
+           L 132 150
+           A 64 64 0 0 1 100 26 Z" 
+        fill="url(#qGrad)" />
+
+  <!-- Inner Speech Bubble (White) -->
+  <path d="M 98 44 
+           C 66 44 46 62 46 88 
+           C 46 102 54 114 66 122
+           L 58 138 
+           L 78 129 
+           C 84 131 91 132 98 132 
+           C 130 132 150 114 150 88 
+           C 150 62 130 44 98 44 Z" 
+        fill="#FFFFFF" />
+
+  <!-- Robot Headset Headband -->
+  <path d="M 68 76 C 68 58 80 48 98 48 C 116 48 128 58 128 76" 
+        stroke="url(#headbandGrad)" 
+        stroke-width="5" 
+        stroke-linecap="round" 
+        fill="none" />
+
+  <!-- Left Headphone Ear Cup -->
+  <rect x="58" y="70" width="13" height="26" rx="6.5" fill="#DC2626" />
+  <!-- Right Headphone Ear Cup -->
+  <rect x="125" y="70" width="13" height="26" rx="6.5" fill="#DC2626" />
+
+  <!-- Robot Face Capsule (Dark) -->
+  <rect x="73" y="66" width="50" height="34" rx="14" fill="#0F172A" />
+
+  <!-- Happy Curved Eyes -->
+  <!-- Left Eye -->
+  <path d="M 81 83 Q 86 76 91 83" 
+        stroke="#EF4444" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        fill="none" />
+  <!-- Right Eye -->
+  <path d="M 105 83 Q 110 76 115 83" 
+        stroke="#EF4444" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        fill="none" />
+
+  <!-- Headset Microphone Arm & Capsule -->
+  <path d="M 130 88 Q 126 108 108 110" 
+        stroke="#DC2626" 
+        stroke-width="3.5" 
+        stroke-linecap="round" 
+        fill="none" />
+  <!-- Mic Capsule -->
+  <rect x="100" y="106" width="12" height="7" rx="3.5" fill="#DC2626" />
+</svg>
