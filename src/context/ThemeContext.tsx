@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type ThemeMode = 'light' | 'midnight';
+export type ThemeMode = 'black' | 'midnight_red';
 
 interface ThemeContextType {
   theme: ThemeMode;
@@ -16,35 +16,34 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const THEME_STORAGE_KEY = 'resolveiq_theme';
+const THEME_STORAGE_KEY = 'resolveiq_theme_v2';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      if (stored === 'light' || stored === 'midnight') {
+      if (stored === 'black' || stored === 'midnight_red') {
         return stored;
       }
-      // Default to midnight for modern high-contrast developer / enterprise experience
-      return 'midnight';
+      return 'black';
     }
-    return 'midnight';
+    return 'black';
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'midnight') {
-      root.classList.add('dark');
-      root.setAttribute('data-theme', 'midnight');
-    } else {
-      root.classList.remove('dark');
-      root.setAttribute('data-theme', 'light');
-    }
+    // Always apply dark & black-red-white data attributes
+    root.classList.add('dark');
+    root.classList.add('theme-black');
+    root.setAttribute('data-theme', theme);
+    document.body.style.backgroundColor = '#000000';
+    document.body.style.color = '#ffffff';
+
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'midnight' ? 'light' : 'midnight'));
+    setThemeState((prev) => (prev === 'black' ? 'midnight_red' : 'black'));
   };
 
   const setTheme = (newTheme: ThemeMode) => {
@@ -55,7 +54,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider
       value={{
         theme,
-        isMidnight: theme === 'midnight',
+        isMidnight: true, // Always true for dark/black base
         toggleTheme,
         setTheme,
       }}

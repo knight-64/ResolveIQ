@@ -6,20 +6,18 @@
     font-feature-settings: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    --bg-main: #f8fafc;
-    --card-bg: #ffffff;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
+    --bg-main: #000000;
+    --card-bg: #0a0a0a;
+    --text-primary: #ffffff;
+    --text-secondary: #fca5a5;
+    --text-accent: #ef4444;
+    --border-color: #2e0d0d;
+    color-scheme: dark;
   }
 
-  html.dark, html[data-theme='midnight'] {
-    --bg-main: #07090e;
-    --card-bg: #0d111a;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-color: #1e293b;
-    color-scheme: dark;
+  html, html.dark, body {
+    background-color: #000000 !important;
+    color: #ffffff !important;
   }
 
   code, kbd, samp, pre, .font-mono {
@@ -27,113 +25,275 @@
     font-feature-settings: 'zero' 1;
   }
 
-  /* Custom subtle scrollbars for dense data tables */
+  /* Custom Black & Red High-Contrast Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #000000;
   }
   ::-webkit-scrollbar-thumb {
-    background: #d4d4d8;
+    background: #dc2626;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #a1a1aa;
+    background: #ef4444;
   }
 
-  html.dark ::-webkit-scrollbar-thumb {
-    background: #27272a;
-  }
-  html.dark ::-webkit-scrollbar-thumb:hover {
-    background: #3f3f46;
+  ::selection {
+    background-color: #dc2626;
+    color: #ffffff;
   }
 }
 
 /* ==========================================================================
-   Midnight Dark Theme — High-Contrast Enterprise Styling System
+   Black, Red, and White Theme Architecture — Universal High-Contrast System
+   Theme: Pure Black (#000000 / #0a0a0a)
+   Writing & Typography: Crisp White (#FFFFFF) & Vibrant Red (#EF4444 / #F87171)
    ========================================================================== */
 
-html.dark body {
-  background-color: #07090e !important;
-  color: #f8fafc !important;
+/* Universal Background Overrides to Pure Black & Obsidian Card Surfaces */
+body,
+.bg-white,
+.bg-neutral-50,
+.bg-neutral-50\/70,
+.bg-neutral-50\/60,
+.bg-neutral-50\/50,
+.bg-neutral-100 {
+  background-color: #000000 !important;
 }
 
-/* Card & Surface Containers */
-html.dark .bg-white {
-  background-color: #0d111a !important;
+/* Card & Elevated Container Surfaces */
+.bg-white {
+  background-color: #0a0a0a !important;
+  border-color: #2b0e0e !important;
 }
 
-html.dark .bg-neutral-50,
-html.dark .bg-neutral-50\/70,
-html.dark .bg-neutral-50\/60,
-html.dark .bg-neutral-50\/50,
-html.dark .bg-neutral-100 {
-  background-color: #080b12 !important;
+/* Sub-panels, sidebars, toolbars, and header strips */
+header,
+nav,
+aside,
+.bg-neutral-900,
+.bg-slate-900,
+.bg-neutral-800 {
+  background-color: #050505 !important;
 }
 
-/* High-Contrast Borders */
-html.dark .border-neutral-200,
-html.dark .border-neutral-200\/90,
-html.dark .border-neutral-200\/80,
-html.dark .border-neutral-300 {
-  border-color: #1a2233 !important;
+/* Modal and Dialog Containers */
+div[role="dialog"],
+.shadow-2xl,
+.shadow-xl {
+  background-color: #0a0a0a !important;
+  border-color: #3b1010 !important;
+  box-shadow: 0 0 35px rgba(220, 38, 38, 0.2) !important;
 }
 
-html.dark .border-neutral-100 {
-  border-color: #151b29 !important;
+/* ==========================================================================
+   Writing System: White (#ffffff) and Red (#ef4444 / #f87171)
+   ========================================================================== */
+
+/* Primary Headings and Crucial Text — Pure White */
+h1, h2, h3, h4, h5, h6,
+.text-neutral-900,
+.text-neutral-800,
+.text-gray-900,
+.text-slate-900 {
+  color: #ffffff !important;
 }
 
-html.dark .divide-neutral-100 > :not([hidden]) ~ :not([hidden]),
-html.dark .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #1a2233 !important;
-}
-
-/* High-Contrast Typography */
-html.dark .text-neutral-900 {
-  color: #f8fafc !important;
-}
-
-html.dark .text-neutral-800 {
+/* Subheadings, Labels, and Structural Accents — Red & Bright White */
+.text-neutral-700,
+.text-neutral-600,
+.text-gray-700,
+.text-gray-600 {
   color: #f1f5f9 !important;
 }
 
-html.dark .text-neutral-700 {
-  color: #cbd5e1 !important;
+/* Secondary Metadata, Tags, Counts, and Descriptions — Soft White or Bright Red */
+.text-neutral-500,
+.text-neutral-400,
+.text-gray-500,
+.text-gray-400 {
+  color: #e2e8f0 !important;
 }
 
-html.dark .text-neutral-600 {
-  color: #94a3b8 !important;
+/* Accent texts, Highlight Badges, and Alert Text — Vibrant Red */
+.text-red-500,
+.text-red-600,
+.text-red-700,
+.text-rose-500,
+.text-rose-600 {
+  color: #ef4444 !important;
 }
 
-html.dark .text-neutral-500 {
-  color: #64748b !important;
+.text-red-400,
+.text-rose-400 {
+  color: #f87171 !important;
 }
 
-/* Table & Interactive Row Hover States */
-html.dark .hover\:bg-neutral-50:hover,
-html.dark .hover\:bg-neutral-50\/80:hover,
-html.dark .hover\:bg-neutral-100:hover {
-  background-color: #131a29 !important;
+.text-red-300,
+.text-rose-300 {
+  color: #fca5a5 !important;
 }
 
-/* Inputs, Textareas, Selects */
-html.dark input,
-html.dark textarea,
-html.dark select {
-  background-color: #090d16 !important;
-  border-color: #1f293d !important;
-  color: #f8fafc !important;
+/* Convert all blue/indigo branding text to White and Red */
+.text-blue-600,
+.text-blue-500,
+.text-indigo-600,
+.text-indigo-500,
+.text-violet-600,
+.text-cyan-600 {
+  color: #ef4444 !important;
 }
 
-html.dark input::placeholder,
-html.dark textarea::placeholder {
-  color: #64748b !important;
+.text-emerald-600,
+.text-green-600,
+.text-teal-600 {
+  color: #ffffff !important;
 }
 
-/* Modals & Popovers */
-html.dark .shadow-2xl,
-html.dark .shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7) !important;
+/* ==========================================================================
+   Borders & Dividers: Dark Crimson Red & High-Contrast Lines
+   ========================================================================== */
+
+.border-neutral-200,
+.border-neutral-200\/90,
+.border-neutral-200\/80,
+.border-neutral-300,
+.border-neutral-400,
+.border-slate-200,
+.border-gray-200 {
+  border-color: #2b0e0e !important;
+}
+
+.border-neutral-100,
+.border-slate-100,
+.border-gray-100 {
+  border-color: #1f0808 !important;
+}
+
+.border-neutral-800,
+.border-neutral-700 {
+  border-color: #3b1212 !important;
+}
+
+.divide-neutral-100 > :not([hidden]) ~ :not([hidden]),
+.divide-neutral-200 > :not([hidden]) ~ :not([hidden]),
+.divide-neutral-800 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #260d0d !important;
+}
+
+/* Convert blue borders to Red borders */
+.border-blue-200,
+.border-blue-300,
+.border-blue-500,
+.border-indigo-200,
+.border-indigo-500 {
+  border-color: #ef4444 !important;
+}
+
+/* ==========================================================================
+   Tables, Lists, and Interactive Row Hover States
+   ========================================================================== */
+
+table, thead, tbody, tr, td, th {
+  border-color: #260d0d !important;
+}
+
+thead th {
+  background-color: #0a0a0a !important;
+  color: #f87171 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 2px solid #dc2626 !important;
+}
+
+tbody tr {
+  background-color: #050505 !important;
+  color: #ffffff !important;
+}
+
+tbody tr:hover,
+.hover\:bg-neutral-50:hover,
+.hover\:bg-neutral-50\/80:hover,
+.hover\:bg-neutral-100:hover,
+.hover\:bg-neutral-900:hover {
+  background-color: #1a0808 !important;
+  border-color: #ef4444 !important;
+}
+
+/* ==========================================================================
+   Inputs, Textareas, and Dropdown Controls
+   ========================================================================== */
+
+input,
+textarea,
+select {
+  background-color: #080808 !important;
+  border: 1px solid #3b1212 !important;
+  color: #ffffff !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #ef4444 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #fca5a5 !important;
+  opacity: 0.6 !important;
+}
+
+/* ==========================================================================
+   Buttons & Action Pills
+   ========================================================================== */
+
+/* Primary CTA Buttons */
+.bg-neutral-900,
+.bg-blue-600,
+.bg-indigo-600 {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 1px solid #ef4444 !important;
+}
+
+.bg-neutral-900:hover,
+.bg-blue-600:hover,
+.bg-indigo-600:hover {
+  background-color: #ef4444 !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Red Badges & Highlight Tags */
+.bg-red-50,
+.bg-red-100,
+.bg-blue-50,
+.bg-indigo-50,
+.bg-emerald-50,
+.bg-amber-50 {
+  background-color: rgba(220, 38, 38, 0.15) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.bg-red-950\/30,
+.bg-red-950\/40,
+.bg-red-950\/50,
+.bg-red-950\/60,
+.bg-red-950\/70 {
+  background-color: rgba(185, 28, 28, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Code Blocks and Monospace Telemetry */
+pre, code {
+  color: #fca5a5 !important;
+  background-color: #050505 !important;
+  border-color: #2b0e0e !important;
 }

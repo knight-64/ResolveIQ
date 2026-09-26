@@ -14,6 +14,7 @@ import { DatabaseExplorer } from './components/DatabaseExplorer';
 import { AboutSection } from './components/AboutSection';
 import { SupabaseModal } from './components/SupabaseModal';
 import { CreateCaseModal } from './components/CreateCaseModal';
+import { SystemTourModal } from './components/SystemTourModal';
 import { ChatAssistant } from './components/ChatAssistant';
 import { ToastProvider, useToast } from './components/Toast';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -27,6 +28,7 @@ function AppContent() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
   const [isCreateCaseOpen, setIsCreateCaseOpen] = useState(false);
+  const [isSystemTourOpen, setIsSystemTourOpen] = useState(false);
   const [, setTick] = useState(0);
 
   // Re-render when database state updates
@@ -98,11 +100,7 @@ function AppContent() {
   };
 
   return (
-    <div
-      className={`min-h-screen flex font-sans selection:bg-red-600 selection:text-white antialiased transition-colors duration-150 ${
-        isMidnight ? 'bg-[#07090e] text-neutral-100' : 'bg-[#f8fafc] text-neutral-900'
-      }`}
-    >
+    <div className="min-h-screen flex font-sans selection:bg-red-600 selection:text-white antialiased bg-black text-white">
       {/* Dark Sidebar matching enterprise aesthetic */}
       <Sidebar
         currentTab={currentTab}
@@ -110,6 +108,7 @@ function AppContent() {
         openCasesCount={openCasesCount}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+        onOpenTour={() => setIsSystemTourOpen(true)}
       />
 
       {/* Main Workspace Area */}
@@ -120,6 +119,7 @@ function AppContent() {
           supabaseConfig={supabaseConfig}
           onOpenSupabaseModal={() => setIsSupabaseModalOpen(true)}
           onResetDatabase={handleResetDatabase}
+          onOpenSystemTour={() => setIsSystemTourOpen(true)}
         />
 
         {/* Dynamic Main Body Content */}
@@ -130,6 +130,7 @@ function AppContent() {
               customers={customers}
               onOpenCreateCase={() => setIsCreateCaseOpen(true)}
               onSelectCase={handleSelectCaseFromDashboard}
+              onOpenTour={() => setIsSystemTourOpen(true)}
             />
           )}
 
@@ -157,11 +158,20 @@ function AppContent() {
 
           {currentTab === 'reports' && <HumanQueue onRefresh={handleRefresh} />}
 
-          {currentTab === 'knowledge' && <AboutSection />}
+          {currentTab === 'knowledge' && (
+            <AboutSection onOpenTour={() => setIsSystemTourOpen(true)} />
+          )}
 
           {currentTab === 'settings' && <DatabaseExplorer />}
         </main>
       </div>
+
+      {/* System Tour & Architecture Guide Modal */}
+      <SystemTourModal
+        isOpen={isSystemTourOpen}
+        onClose={() => setIsSystemTourOpen(false)}
+        onNavigateTab={(tab) => setCurrentTab(tab)}
+      />
 
       {/* Create New Case Modal */}
       <CreateCaseModal

@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  Compass,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
@@ -32,6 +33,7 @@ interface SidebarProps {
   openCasesCount?: number;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  onOpenTour?: () => void;
 }
 
 export function Sidebar({
@@ -40,6 +42,7 @@ export function Sidebar({
   openCasesCount = 124,
   isCollapsed,
   onToggleCollapse,
+  onOpenTour,
 }: SidebarProps) {
   const navItems = [
     { id: 'dashboard' as MainNavTab, label: 'Dashboard', icon: LayoutDashboard },
@@ -52,14 +55,14 @@ export function Sidebar({
 
   return (
     <aside
-      className={`bg-black text-neutral-300 flex flex-col justify-between shrink-0 border-r border-neutral-800/90 transition-all duration-200 z-30 select-none ${
+      className={`bg-black text-white flex flex-col justify-between shrink-0 border-r border-red-950/80 transition-all duration-200 z-30 select-none ${
         isCollapsed ? 'w-18' : 'w-60'
       } h-screen sticky top-0`}
     >
       {/* Top Branding & Navigation */}
       <div className="flex flex-col flex-1 overflow-y-auto">
         {/* Brand Header */}
-        <div className="h-16 flex items-center px-4.5 border-b border-neutral-800/80 gap-3">
+        <div className="h-16 flex items-center px-4.5 border-b border-red-950/80 gap-3 bg-black">
           <Logo size="md" textColor="light" showWordmark={!isCollapsed} />
         </div>
 
@@ -76,14 +79,16 @@ export function Sidebar({
                 title={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-neutral-900 text-white font-semibold ring-1 ring-neutral-700/60 shadow-xs'
-                    : 'text-neutral-400 hover:text-white hover:bg-neutral-900/60'
+                    ? 'bg-red-600 text-white font-bold ring-1 ring-red-400 shadow-[0_0_15px_rgba(239,68,68,0.4)]'
+                    : 'text-neutral-300 hover:text-white hover:bg-red-950/30 hover:border-red-900/50'
                 } ${isCollapsed ? 'justify-center px-0' : ''}`}
               >
-                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-neutral-400'}`} />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-red-500'}`} />
                 {!isCollapsed && <span className="truncate flex-1 text-left">{item.label}</span>}
                 {!isCollapsed && item.badge && item.id === 'cases' && (
-                  <span className="text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-200 px-2 py-0.5 rounded-full border border-neutral-700/60">
+                  <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border ${
+                    isActive ? 'bg-black text-white border-white/40' : 'bg-red-950 text-red-300 border-red-800'
+                  }`}>
                     {item.badge}
                   </span>
                 )}
@@ -94,7 +99,27 @@ export function Sidebar({
       </div>
 
       {/* Bottom Profile & Collapse Button */}
-      <div className="p-3 border-t border-neutral-800/80 space-y-2">
+      <div className="p-3 border-t border-red-950/80 space-y-2 bg-black">
+        {/* System Tour Quick Link */}
+        {onOpenTour && (
+          <button
+            type="button"
+            onClick={onOpenTour}
+            title={isCollapsed ? 'System Guide & Architecture Tour' : undefined}
+            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold border border-red-800/80 bg-red-950/40 text-white hover:bg-red-900/60 hover:text-white transition-all shadow-[0_0_10px_rgba(239,68,68,0.3)] ${
+              isCollapsed ? 'justify-center px-0' : ''
+            }`}
+          >
+            <Compass className="w-4 h-4 text-red-400 shrink-0" />
+            {!isCollapsed && <span className="truncate flex-1 text-left text-white">System Tour</span>}
+            {!isCollapsed && (
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-red-600 text-white font-bold">
+                GUIDE
+              </span>
+            )}
+          </button>
+        )}
+
         {/* Theme Switcher in Sidebar */}
         {!isCollapsed ? (
           <ThemeToggle variant="full" />
@@ -104,21 +129,21 @@ export function Sidebar({
 
         {/* User Profile */}
         {!isCollapsed ? (
-          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-neutral-900 transition-colors cursor-pointer border border-transparent hover:border-neutral-800">
+          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-red-950/30 transition-colors cursor-pointer border border-transparent hover:border-red-900/50">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-xs shrink-0">
+              <div className="w-8 h-8 rounded-full bg-red-600 text-white border border-red-400 flex items-center justify-center font-bold text-xs shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.4)]">
                 A
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-semibold text-white truncate">Alex</div>
-                <div className="text-[11px] text-neutral-400 truncate">@resolveiq.io</div>
+                <div className="text-[11px] text-red-300 truncate">@resolveiq.io</div>
               </div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-400 shrink-0 ml-1" />
+            <ChevronDown className="w-3.5 h-3.5 text-red-400 shrink-0 ml-1" />
           </div>
         ) : (
           <div className="flex justify-center py-1">
-            <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-red-600 text-white border border-red-400 flex items-center justify-center font-bold text-xs shadow-[0_0_8px_rgba(239,68,68,0.4)]">
               A
             </div>
           </div>
@@ -128,16 +153,16 @@ export function Sidebar({
         <button
           type="button"
           onClick={onToggleCollapse}
-          className={`w-full flex items-center gap-2 px-3 py-2 text-xs text-neutral-400 hover:text-white hover:bg-neutral-900 rounded-lg transition-colors ${
+          className={`w-full flex items-center gap-2 px-3 py-2 text-xs text-red-300 hover:text-white hover:bg-red-950/30 rounded-lg transition-colors ${
             isCollapsed ? 'justify-center px-0' : ''
           }`}
         >
           {isCollapsed ? (
-            <ChevronsRight className="w-4 h-4" />
+            <ChevronsRight className="w-4 h-4 text-red-500" />
           ) : (
             <>
-              <ChevronsLeft className="w-4 h-4" />
-              <span>Collapse</span>
+              <ChevronsLeft className="w-4 h-4 text-red-500" />
+              <span className="text-neutral-200">Collapse</span>
             </>
           )}
         </button>

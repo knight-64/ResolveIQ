@@ -27,10 +27,15 @@ import {
   HelpCircle,
   ExternalLink,
   TableProperties,
+  Compass,
 } from 'lucide-react';
 import { Logo } from './Logo';
 
-export function AboutSection() {
+interface AboutSectionProps {
+  onOpenTour?: () => void;
+}
+
+export function AboutSection({ onOpenTour }: AboutSectionProps = {}) {
   const [activeDiagram, setActiveDiagram] = useState<'architecture' | 'decision_tree' | 'er_schema' | 'security_matrix'>('architecture');
   const [selectedArchNode, setSelectedArchNode] = useState<string>('guard');
   const [selectedTable, setSelectedTable] = useState<string>('refunds');
@@ -189,6 +194,18 @@ export function AboutSection() {
             <p className="text-xs sm:text-sm text-neutral-600 max-w-2xl leading-relaxed">
               ResolveIQ combines modern LLM entity comprehension with strict mathematical policy guards and ACID PostgreSQL database transactions to deliver instant, secure financial dispute settlements.
             </p>
+            {onOpenTour && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={onOpenTour}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition-all shadow-xs hover:shadow-sm hover:scale-[1.02]"
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Launch Interactive System Tour</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Quick Metrics Badge Group */}

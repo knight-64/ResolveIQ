@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Shield, Sparkles } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useToast } from './Toast';
 
@@ -14,17 +14,18 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ variant = 'compact', className = '' }: ThemeToggleProps) {
-  const { theme, isMidnight, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { showToast } = useToast();
 
   const handleToggle = () => {
     toggleTheme();
+    const isPureBlack = theme === 'black';
     showToast({
       type: 'info',
-      title: isMidnight ? 'Switched to Light Theme' : 'Switched to Midnight Theme',
-      description: isMidnight
-        ? 'High-visibility daylight palette activated.'
-        : 'Deep contrast Midnight dark mode activated.',
+      title: isPureBlack ? 'Crimson Obsidian Theme' : 'Pitch Black & Red Theme',
+      description: isPureBlack
+        ? 'Deep midnight black with crimson red and high-contrast white text.'
+        : 'Pure pitch black with glowing red accents and crisp white typography.',
     });
   };
 
@@ -33,18 +34,10 @@ export function ThemeToggle({ variant = 'compact', className = '' }: ThemeToggle
       <button
         type="button"
         onClick={handleToggle}
-        title={isMidnight ? 'Switch to Light Theme' : 'Switch to Midnight Dark Theme'}
-        className={`relative p-2 rounded-lg transition-all flex items-center justify-center ${
-          isMidnight
-            ? 'bg-neutral-900 border border-neutral-800 text-amber-300 hover:text-amber-200 hover:bg-neutral-800'
-            : 'bg-white border border-neutral-200 text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 shadow-2xs'
-        } ${className}`}
+        title="Toggle Black, Red & White Contrast"
+        className={`relative p-2 rounded-lg transition-all flex items-center justify-center bg-black border border-red-900/60 text-red-500 hover:text-white hover:border-red-600 hover:bg-red-950/40 shadow-[0_0_12px_rgba(239,68,68,0.25)] ${className}`}
       >
-        {isMidnight ? (
-          <Moon className="w-4 h-4 fill-amber-300/20 stroke-[2.2]" />
-        ) : (
-          <Sun className="w-4 h-4 stroke-[2.2]" />
-        )}
+        <Sparkles className="w-4 h-4 fill-red-500/20 stroke-[2.2]" />
       </button>
     );
   }
@@ -53,22 +46,14 @@ export function ThemeToggle({ variant = 'compact', className = '' }: ThemeToggle
     <button
       type="button"
       onClick={handleToggle}
-      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-        isMidnight
-          ? 'bg-neutral-900 text-neutral-200 hover:bg-neutral-800 border border-neutral-800'
-          : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200'
-      } ${className}`}
+      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all bg-black text-white hover:bg-red-950/30 border border-red-900/50 hover:border-red-600 ${className}`}
     >
       <div className="flex items-center gap-2">
-        {isMidnight ? (
-          <Moon className="w-3.5 h-3.5 text-amber-300 fill-amber-300/20" />
-        ) : (
-          <Sun className="w-3.5 h-3.5 text-neutral-600" />
-        )}
-        <span className="font-semibold">{isMidnight ? 'Midnight Theme' : 'Light Theme'}</span>
+        <Shield className="w-3.5 h-3.5 text-red-500 fill-red-500/20" />
+        <span className="font-semibold text-white">Black & Red Mode</span>
       </div>
-      <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-neutral-800/60 text-neutral-300 border border-neutral-700/50">
-        {isMidnight ? 'Dark' : 'Light'}
+      <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/80 font-bold">
+        {theme === 'black' ? 'PITCH' : 'CRIMSON'}
       </span>
     </button>
   );

@@ -31,6 +31,8 @@ import {
   Database,
   Scale,
   Zap,
+  Compass,
+  ArrowRight,
 } from 'lucide-react';
 import { Customer, Ticket } from '../types';
 import { supabaseDb } from '../supabase';
@@ -41,6 +43,7 @@ interface DashboardViewProps {
   customers: Customer[];
   onOpenCreateCase: () => void;
   onSelectCase: (ticketId: string) => void;
+  onOpenTour?: () => void;
 }
 
 export function DashboardView({
@@ -48,6 +51,7 @@ export function DashboardView({
   customers,
   onOpenCreateCase,
   onSelectCase,
+  onOpenTour,
 }: DashboardViewProps) {
   const { showToast } = useToast();
   const [selectedRange, setSelectedRange] = useState<'This Month' | 'Last 7 Days' | 'All Time'>('This Month');
@@ -239,27 +243,57 @@ export function DashboardView({
             <select
               value={selectedRange}
               onChange={(e) => setSelectedRange(e.target.value as any)}
-              className="appearance-none pl-8.5 pr-8 py-2 bg-white border border-neutral-300 rounded-lg text-xs font-semibold text-neutral-700 hover:bg-neutral-50 shadow-2xs transition-colors cursor-pointer"
+              className="appearance-none pl-8.5 pr-8 py-2 bg-black border border-red-950/80 rounded-lg text-xs font-semibold text-white hover:border-red-600 transition-colors cursor-pointer"
             >
               <option value="This Month">This Month</option>
               <option value="Last 7 Days">Last 7 Days</option>
               <option value="All Time">All Time</option>
             </select>
-            <Calendar className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-3 pointer-events-none" />
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-400 absolute right-3 top-3 pointer-events-none" />
+            <Calendar className="w-3.5 h-3.5 text-red-500 absolute left-3 top-3 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-red-400 absolute right-3 top-3 pointer-events-none" />
           </div>
 
           {/* Primary CTA Button */}
           <button
             type="button"
             onClick={onOpenCreateCase}
-            className="flex items-center gap-2 px-4 py-2 bg-[#111827] hover:bg-[#1f2937] text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-all"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Create New Case</span>
           </button>
         </div>
       </div>
+
+      {/* Interactive System Explanation & Architecture Tour Callout */}
+      {onOpenTour && (
+        <div className="rounded-xl border border-red-500/30 bg-gradient-to-r from-red-950/15 via-neutral-900/10 to-transparent p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-red-600/10 text-red-600 border border-red-600/20 flex items-center justify-center shrink-0">
+              <Compass className="w-5 h-5 animate-spin-slow" />
+            </div>
+            <div>
+              <div className="text-xs font-bold flex items-center gap-2">
+                <span>ResolveIQ Architecture & System Explanation</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-red-600/15 text-red-600 font-semibold border border-red-600/30">
+                  INTERACTIVE GUIDE
+                </span>
+              </div>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+                Explore the 5-agent AI pipeline, deterministic policy guards (&le; ₹5,000 cap), and live simulation sandbox.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenTour}
+            className="flex items-center gap-2 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shrink-0 transition-all shadow-xs hover:shadow-sm"
+          >
+            <span>Launch System Tour</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* 4 Metric Cards Grid — Calculated from Live Database State */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -285,7 +319,7 @@ export function DashboardView({
               <path
                 d="M 2 28 Q 20 32 30 20 T 50 15 T 78 6"
                 fill="none"
-                stroke="#10b981"
+                stroke="#ef4444"
                 strokeWidth="2.2"
                 strokeLinecap="round"
               />
@@ -314,7 +348,7 @@ export function DashboardView({
               <path
                 d="M 2 10 Q 25 12 40 22 T 60 25 T 78 32"
                 fill="none"
-                stroke="#10b981"
+                stroke="#ef4444"
                 strokeWidth="2.2"
                 strokeLinecap="round"
               />
@@ -362,7 +396,7 @@ export function DashboardView({
               <path
                 d="M 2 12 Q 25 15 45 26 T 65 28 T 78 34"
                 fill="none"
-                stroke="#10b981"
+                stroke="#ef4444"
                 strokeWidth="2.2"
                 strokeLinecap="round"
               />
